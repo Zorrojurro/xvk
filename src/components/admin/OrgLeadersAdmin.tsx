@@ -196,7 +196,7 @@ export default function OrgLeadersAdmin() {
     setUploadingId(leaderId)
     try {
       const ext = (file.name.split(".").pop() || "jpg").toLowerCase()
-      const path = `leaders/${leaderId}/${Date.now()}_${safeUuid()}.${ext}`
+      const path = `leaders/${leaderId}/${Date.now()}_${uid()}.${ext}`
 
       const up = await supabase.storage.from(BUCKET).upload(path, file, {
         upsert: true,
