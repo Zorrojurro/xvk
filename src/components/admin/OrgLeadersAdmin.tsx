@@ -19,12 +19,15 @@ type LeaderRow = {
 
 const BUCKET = process.env.NEXT_PUBLIC_LEADERS_BUCKET || "leaders"
 
-function safeUuid() {
-  // browser-safe uuid
+function uid() {
+  // browser-safe uuid (works in modern browsers + Vercel runtime)
   const c = globalThis.crypto as Crypto | undefined
-  // @ts-expect-error randomUUID may not exist in older runtimes
-  return c?.randomUUID ? c.randomUUID() : `id_${Date.now()}_${Math.random().toString(16).slice(2)}`
+  if (c && "randomUUID" in c && typeof (c as any).randomUUID === "function") {
+    return (c as any).randomUUID() as string
+  }
+  return `id_${Date.now()}_${Math.random().toString(16).slice(2)}`
 }
+
 
 function asInt(n: unknown, fallback = 0) {
   const x = Number(n)
