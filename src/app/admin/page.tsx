@@ -90,7 +90,7 @@ function downloadCsv(filename: string, rows: Record<string, any>[]) {
 }
 
 export default function AdminPage() {
-  const [session, setSession] = useState<any>(null)
+  const [session, setSession] = useState<{ user: { id: string; email?: string } } | null>(null)
 
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
   const [adminCheckErr, setAdminCheckErr] = useState<string | null>(null)
@@ -242,18 +242,18 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!allowed) return
-    ;(async () => {
-      try {
-        setErr(null)
-        setOk(null)
-        setLoading(true)
-        await Promise.all([loadStories(), loadContacts(), loadEvents()])
-      } catch (e: any) {
-        setErr(e?.message || "Failed to load admin data.")
-      } finally {
-        setLoading(false)
-      }
-    })()
+      ; (async () => {
+        try {
+          setErr(null)
+          setOk(null)
+          setLoading(true)
+          await Promise.all([loadStories(), loadContacts(), loadEvents()])
+        } catch (e: any) {
+          setErr(e?.message || "Failed to load admin data.")
+        } finally {
+          setLoading(false)
+        }
+      })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allowed])
 
@@ -635,11 +635,10 @@ export default function AdminPage() {
                         <button
                           key={s.id}
                           onClick={() => setSelectedStoryId(s.id)}
-                          className={`text-left rounded-2xl border p-3 transition ${
-                            selectedStoryId === s.id
+                          className={`text-left rounded-2xl border p-3 transition ${selectedStoryId === s.id
                               ? "border-[#622599]/40 bg-[#622599]/5"
                               : "border-slate-200 hover:bg-slate-50"
-                          }`}
+                            }`}
                         >
                           <div className="text-xs font-semibold text-[#622599]">
                             {s.status.toUpperCase()} | {new Date(s.created_at).toLocaleString()}
@@ -723,9 +722,8 @@ export default function AdminPage() {
                                 setLoading(false)
                               }
                             }}
-                            className={`text-left rounded-2xl border p-3 transition ${
-                              selectedEventId === e.id ? "border-[#622599]/40 bg-[#622599]/5" : "border-slate-200 hover:bg-slate-50"
-                            }`}
+                            className={`text-left rounded-2xl border p-3 transition ${selectedEventId === e.id ? "border-[#622599]/40 bg-[#622599]/5" : "border-slate-200 hover:bg-slate-50"
+                              }`}
                           >
                             <div className="text-xs font-semibold text-[#622599]">
                               {new Date(e.starts_at).toLocaleString()}
@@ -873,9 +871,8 @@ export default function AdminPage() {
                         <button
                           key={c.id}
                           onClick={() => setSelectedContactId(c.id)}
-                          className={`text-left rounded-2xl border p-3 transition ${
-                            selectedContactId === c.id ? "border-[#622599]/40 bg-[#622599]/5" : "border-slate-200 hover:bg-slate-50"
-                          }`}
+                          className={`text-left rounded-2xl border p-3 transition ${selectedContactId === c.id ? "border-[#622599]/40 bg-[#622599]/5" : "border-slate-200 hover:bg-slate-50"
+                            }`}
                         >
                           <div className="text-xs text-slate-500">{new Date(c.created_at).toLocaleString()}</div>
                           <div className="mt-1 font-extrabold">{cleanText(c.name)}</div>

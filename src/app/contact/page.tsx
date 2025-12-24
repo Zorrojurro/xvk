@@ -64,8 +64,9 @@ export default function ContactPage() {
             <div className="mt-6 text-sm text-slate-700 dark:text-slate-200">
               <div className="font-semibold">You can also reach us directly</div>
               <div className="mt-2 text-slate-600 dark:text-slate-300">
-                Email: <span className="font-medium">yourunit@email.com</span><br />
-                Phone: <span className="font-medium">+91 XXXXXXXXXX</span>
+                {/* TODO: Replace with actual contact info */}
+                Email: <span className="font-medium">contact@xvkanteerava.org</span><br />
+                Phone: <span className="font-medium">+91 XXXXX XXXXX</span>
               </div>
             </div>
           </div>

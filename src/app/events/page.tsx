@@ -91,7 +91,7 @@ export default function EventsPage() {
         name: cleanText(name),
         email: cleanText(email) || null,
         phone: cleanText(phone) || null,
-        count: 1,
+        count: Math.max(1, Math.min(10, count)),
         note: cleanText(note) || null,
       }
 
@@ -206,7 +206,7 @@ export default function EventsPage() {
                           <span className="font-semibold">People count</span>
                           <input
                             type="number"
-                            max={1}
+                            max={10}
                             min={1}
                             className="rounded-xl border border-slate-200 bg-white/70 px-3 py-2 dark:border-slate-800 dark:bg-slate-950/40"
                             value={count}

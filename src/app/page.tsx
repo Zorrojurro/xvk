@@ -118,42 +118,42 @@ export default function HomePage() {
 
   useEffect(() => {
     let alive = true
-    ;(async () => {
-      try {
-        // ✅ Correct tables: org_stats + leaders
-        // org_stats: expect single row (or just take the first row)
-        const { data: statsRows, error: statsErr } = await supabase.from("org_stats").select("*").limit(1)
-        if (!statsErr) {
-          const stats = statsRows?.[0] ?? null
+      ; (async () => {
+        try {
+          // ✅ Correct tables: org_stats + leaders
+          // org_stats: expect single row (or just take the first row)
+          const { data: statsRows, error: statsErr } = await supabase.from("org_stats").select("*").limit(1)
+          if (!statsErr) {
+            const stats = statsRows?.[0] ?? null
 
-          // memberCount: support multiple possible column names
-          const mc =
-            asNumber((stats as any)?.member_count) ??
-            asNumber((stats as any)?.strength) ??
-            asNumber((stats as any)?.current_strength)
+            // memberCount: support multiple possible column names
+            const mc =
+              asNumber((stats as any)?.member_count) ??
+              asNumber((stats as any)?.strength) ??
+              asNumber((stats as any)?.current_strength)
 
-          // volunteerCount: support multiple possible column names
-          const vc =
-            asNumber((stats as any)?.volunteer_count) ??
-            asNumber((stats as any)?.volunteers) ??
-            asNumber((stats as any)?.volunteers_count)
+            // volunteerCount: support multiple possible column names
+            const vc =
+              asNumber((stats as any)?.volunteer_count) ??
+              asNumber((stats as any)?.volunteers) ??
+              asNumber((stats as any)?.volunteers_count)
 
-          if (alive) {
-            if (mc !== null) setMemberCount(mc)
-            if (vc !== null) setVolunteerCount(vc)
+            if (alive) {
+              if (mc !== null) setMemberCount(mc)
+              if (vc !== null) setVolunteerCount(vc)
+            }
           }
+
+          const { data: ls, error: leadersErr } = await supabase
+            .from("leaders")
+            .select("id,name,role,photo_url,sort_order")
+            .order("sort_order", { ascending: true })
+
+          if (!leadersErr && alive) setLeaders((ls ?? []) as LeaderRow[])
+        } catch {
+          // keep page rendering even if DB not ready
         }
-
-        const { data: ls, error: leadersErr } = await supabase
-          .from("leaders")
-          .select("id,name,role,photo_url,sort_order")
-          .order("sort_order", { ascending: true })
-
-        if (!leadersErr && alive) setLeaders((ls ?? []) as LeaderRow[])
-      } catch {
-        // keep page rendering even if DB not ready
-      }
-    })()
+      })()
 
     return () => {
       alive = false
@@ -162,25 +162,6 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-xvk-radial relative">
-      {/* Blurred logo background
-          Put your logo at: /public/brand/xvksg-logo.png
-          This <img> hides itself if missing, so no console spam.
-      */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0" />
-        <div className="absolute inset-0 grid place-items-center opacity-[0.12] blur-[12px]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/brand/xvksg-logo.png"
-            alt=""
-            className="h-auto w-[70%] max-w-[980px]"
-            onError={(e) => {
-              ;(e.currentTarget as HTMLImageElement).style.display = "none"
-            }}
-          />
-        </div>
-      </div>
-
       {/* HERO */}
       <section className="container-x py-14 md:py-20">
         <div className="card p-7 md:p-10">
@@ -202,7 +183,7 @@ export default function HomePage() {
                 <span className="block text-[#622599]">A community that builds better people.</span>
               </h1>
 
-              <p className="mt-4 text-base leading-relaxed text-slate-700">
+              <p className="mt-4 text-base leading-relaxed text-slate-700 dark:text-slate-300">
                 Scouting is about community. It shapes character, builds confidence, and trains real-life skills through
                 service and leadership. Whether you are a kid starting out or a volunteer stepping in, you grow with us
                 and help make the world better.
@@ -274,7 +255,7 @@ export default function HomePage() {
       <section id="about" className="container-x py-10">
         <div className="card p-6 md:p-8">
           <h2 className="text-2xl font-extrabold">About us</h2>
-          <p className="mt-3 text-slate-700">
+          <p className="mt-3 text-slate-700 dark:text-slate-300">
             XV Kanteerava is a volunteer-led scout unit focused on community impact and personal growth. We welcome
             students, working professionals, alumni, and anyone willing to contribute time, skills, and effort.
           </p>
@@ -330,7 +311,7 @@ export default function HomePage() {
                                 className="h-full w-full object-cover"
                                 onError={(e) => {
                                   // hide broken images without console spam
-                                  ;(e.currentTarget as HTMLImageElement).style.display = "none"
+                                  ; (e.currentTarget as HTMLImageElement).style.display = "none"
                                 }}
                               />
                             ) : (
@@ -355,10 +336,10 @@ export default function HomePage() {
       </section>
 
       {/* WINGS */}
-      <section className="container-x py-10">
+      <section id="wings" className="container-x py-10">
         <div className="card p-6 md:p-8">
           <h2 className="text-2xl font-extrabold">Wings in our scouting</h2>
-          <p className="mt-3 text-slate-700">Different wings for different ages - same purpose: build character, skills, leadership, and service.</p>
+          <p className="mt-3 text-slate-700 dark:text-slate-300">Different wings for different ages - same purpose: build character, skills, leadership, and service.</p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {wings.map((w) => (
@@ -378,7 +359,7 @@ export default function HomePage() {
       <section id="history" className="container-x py-10">
         <div className="card p-6 md:p-8">
           <h2 className="text-2xl font-extrabold">Our history</h2>
-          <p className="mt-3 text-slate-700">75 years of discipline, service, and leadership through action. Tap to expand, tap again to collapse.</p>
+          <p className="mt-3 text-slate-700 dark:text-slate-300">75 years of discipline, service, and leadership through action. Tap to expand, tap again to collapse.</p>
 
           <div className="mt-6 grid gap-3">
             {history.map((t) => {
@@ -414,7 +395,7 @@ export default function HomePage() {
       <section id="work" className="container-x py-10">
         <div className="card p-6 md:p-8">
           <h2 className="text-2xl font-extrabold">The work we do</h2>
-          <p className="mt-3 text-slate-700">Practical community work + skill-building. Simple idea: show up, learn fast, and do real things that help.</p>
+          <p className="mt-3 text-slate-700 dark:text-slate-300">Practical community work + skill-building. Simple idea: show up, learn fast, and do real things that help.</p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {work.map((w) => (

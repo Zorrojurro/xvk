@@ -33,8 +33,8 @@
   /* XVKSG blurred watermark background */
 /* XVKSG blurred watermark background */
 .xvk-watermark::before {
-  content: "";
-  position: fixed;
+  content: ""; 
+ position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: -1;
